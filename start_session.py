@@ -6,9 +6,9 @@ from kittens.tui.handler import Handler
 from kittens.tui.loop import Loop
 from kittens.tui.operations import styled
 from kitty.boss import Boss
-from kitty.key_encoding import KeyEvent, key_defs as K
+from kitty.key_encoding import KeyEvent
+from kitty.key_encoding import key_defs as K
 from kitty.session import create_sessions
-
 
 Selectable = TypeVar("Selectable")
 
