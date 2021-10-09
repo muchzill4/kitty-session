@@ -6,8 +6,8 @@ from kittens.tui.handler import Handler
 from kittens.tui.loop import Loop
 from kittens.tui.operations import styled
 from kitty.boss import Boss
+from kitty.fast_data_types import get_options
 from kitty.key_encoding import KeyEvent
-from kitty.key_encoding import key_defs as K
 from kitty.session import create_sessions
 
 Selectable = TypeVar("Selectable")
@@ -32,12 +32,6 @@ class Selection(Iterable[Selectable]):
     @property
     def selected(self) -> Selectable:
         return self.items[self.selected_index]
-
-
-ESCAPE = K["ESCAPE"]
-ENTER = K["ENTER"]
-DOWN = K["DOWN"]
-UP = K["UP"]
 
 
 class SelectHandler(Generic[Selectable], Handler):
@@ -85,23 +79,15 @@ class SelectHandler(Generic[Selectable], Handler):
         print("Select: {}".format(styled("Enter", italic=True)))
         print("Exit: {}".format(styled("Esc/Q", italic=True)))
 
-    def on_text(self, text: str, in_bracketed_paste: bool = False) -> None:
-        text = text.upper()
-        if text == "J":
-            self.select_next()
-        elif text == "K":
-            self.select_prev()
-        elif text == "Q":
-            self.quit_without_selection()
-
     def on_key(self, key_event: KeyEvent) -> None:
-        if key_event.key == DOWN:
+        key = key_event.key
+        if key in ("DOWN", "j"):
             self.select_next()
-        if key_event.key == UP:
+        if key in ("UP", "k"):
             self.select_prev()
-        if key_event.key == ENTER:
+        if key == "ENTER":
             self.quit_loop(0)
-        elif key_event.key == ESCAPE:
+        elif key in ("ESCAPE", "q"):
             self.quit_without_selection()
 
 
@@ -133,6 +119,6 @@ def handle_result(
     args: List[str], session_file_path: str, target_window_id: int, boss: Boss
 ) -> None:
     startup_session = next(
-        create_sessions(boss.opts, default_session=session_file_path)
+        create_sessions(get_options(), default_session=session_file_path)
     )
     boss.add_os_window(startup_session)
