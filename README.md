@@ -28,6 +28,13 @@ Do not despair! I've been exploring an alternative approach with reasonable succ
 1. 1. If a kitty tab with given project is already available, focus it.
    1. If a kitty tab with selected project isn't already available, create it and `cd` into directory.
 
-Since I use fish, [here's a fish function](https://github.com/muchzill4/setup/blob/master/dotfiles/fish/.config/fish/functions/kt.fish) that is bound to be [invoked on a keypress in kitty](https://github.com/muchzill4/setup/blob/master/dotfiles/kitty/.config/kitty/kitty.conf#L27).
+Since I use fish, [here's a fish function](https://github.com/muchzill4/setup/blob/master/dotfiles/fish/.config/fish/functions/kt.fish) that is bound in kitty:
 
-If I have to manage many processes in a "session", I will split the window and use [zooming](https://github.com/muchzill4/setup/blob/master/dotfiles/kitty/.config/kitty/kitty.conf#L28) to full screen the vim session or whatever else I need to focus on.
+```
+map cmd+p launch --type=tab --allow-remote-control fish -c kt
+```
+
+If I have to manage many processes in a "session", I will split the window and use stack layout to full screen the window I need to focus on:
+```
+map cmd+z toggle_layout stack
+```
